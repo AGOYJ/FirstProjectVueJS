@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Dashboard</h1>
-    <p>Welcome, {{ username }} ({{ role }})!</p>
+    <p>Welcome {{ username }} ({{ role }})!</p>
     <div class="dashboard-links">
       <router-link to="/listes">📝 Lists</router-link>
       <router-link to="/hostings">💾 Hostings</router-link>
