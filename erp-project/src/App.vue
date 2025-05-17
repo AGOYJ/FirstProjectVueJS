@@ -2,12 +2,30 @@
 </script>
 
 <template>
-  <p>page d'accueil</p>
-  <img alt="Vue logo" class="logo vue" src="./assets/vue.svg" />
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/dashboard">Dashboard</router-link> |
+    <router-link to="/listes">Lists</router-link> |
+    <router-link to="/hostings">Hostings</router-link> |
+    <router-link to="/users">Users</router-link> |
+    <router-link to="/domains">Domains</router-link>
+  </nav>
   <router-view />
 </template>
 
 <style scoped>
+nav {
+  margin-bottom: 2rem;
+}
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #646cff;
+}
+nav a.router-link-exact-active {
+  font-weight: bold;
+  color: #213547;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Page d'accueil</h1>
-    <router-link to="/login">Se connecter</router-link>
+    <h1>Home Page</h1>
+    <router-link to="/login">Login</router-link> |
+    <router-link to="/register">Register</router-link>
   </div>
 </template>
