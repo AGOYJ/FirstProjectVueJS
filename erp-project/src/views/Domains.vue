@@ -3,12 +3,12 @@
     <router-link to="/dashboard" class="back-dashboard">⬅ Back to Dashboard</router-link>
     <h1>Domains Management</h1>
     <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}">{{ feedbackMessage }}</div>
-    <DomainForm v-model="formData" :submitLabel="editId ? 'Save' : 'Add'" @submit="editId ? saveEdit(editingDomain) : addDomain" />
+    <DomainForm v-if="!editId" v-model="formData" :users="users" :hostings="hostings" submitLabel="Add" @submit="addDomain" />
     <ul>
       <li v-for="domain in domains" :key="domain.id">
         <span v-if="editId !== domain.id">{{ domain.domainName }}.{{ domain.tld }} (User: {{ domain.idUser }}, Hosting: {{ domain.idHosting }})</span>
         <div v-else>
-          <DomainForm v-model="editData" submitLabel="Save" @submit="() => saveEdit(domain)" />
+          <DomainForm v-model="editData" :users="users" :hostings="hostings" submitLabel="Save" @submit="() => saveEdit(domain)" />
         </div>
         <button v-if="editId !== domain.id" @click="startEdit(domain)">Edit</button>
         <button @click="deleteDomain(domain.id)">Delete</button>
@@ -20,9 +20,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import DomainForm from '../components/DomainForm.vue'
-import { getDomains, addDomain as apiAddDomain, updateDomain, deleteDomain as apiDeleteDomain } from '../services/erpService'
+import { getDomains, addDomain as apiAddDomain, updateDomain, deleteDomain as apiDeleteDomain, getUsers, getHostings } from '../services/erpService'
 
 const domains = ref([])
+const users = ref([])
+const hostings = ref([])
 const formData = ref({
   domainName: '',
   tld: '',
@@ -46,6 +48,22 @@ const fetchDomains = async () => {
     feedbackMessage.value = e.response?.data?.message || e.message || 'Error loading domains.'
     feedbackType.value = 'error'
   }
+}
+
+const fetchUsers = async () => {
+  try {
+    const res = await getUsers()
+    users.value = res.data
+    console.log('Utilisateurs chargés:', users.value)
+  } catch (e) {}
+}
+
+const fetchHostings = async () => {
+  try {
+    const res = await getHostings()
+    hostings.value = res.data
+    console.log('Hébergements chargés:', hostings.value)
+  } catch (e) {}
 }
 
 const addDomain = async () => {
@@ -98,19 +116,9 @@ const deleteDomain = async (id) => {
   }
 }
 
-onMounted(fetchDomains)
+onMounted(() => {
+  fetchDomains()
+  fetchUsers()
+  fetchHostings()
+})
 </script>
-
-<style scoped>
-.back-dashboard {
-  display: inline-block;
-  margin-bottom: 20px;
-  font-size: 16px;
-  color: #007bff;
-  text-decoration: none;
-}
-
-.back-dashboard:hover {
-  text-decoration: underline;
-}
-</style>

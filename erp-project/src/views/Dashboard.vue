@@ -15,22 +15,22 @@
       <div>Total domains: <b>{{ stats.domains }}</b></div>
       <div>Total users: <b>{{ stats.users }}</b></div>
     </div>
-    <button @click="handleLogout">Logout</button>
+    <button @click="handleLogout">Logout</button> <!-- supprime le token et redirige vers /login -->
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { logout, getLists, getTasks, getHostings, getDomains, getUsers } from '../services/erpService'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue' //les fonctions vue
+import { logout, getLists, getTasks, getHostings, getDomains, getUsers } from '../services/erpService' //les fonctions du service erpService
+import { useRouter } from 'vue-router' //et le router
 
 const router = useRouter()
 const username = sessionStorage.getItem('username') || 'User'
 const role = sessionStorage.getItem('role') || 'user'
-const stats = ref({ lists: 0, tasks: 0, hostings: 0, domains: 0, users: 0 })
-const statsLoaded = ref(false)
+const stats = ref({ lists: 0, tasks: 0, hostings: 0, domains: 0, users: 0 }) // Stocke les statistiques du tableau de bord
+const statsLoaded = ref(false) // Indique si les statistiques sont chargées
 
-const fetchStats = async () => {
+const fetchStats = async () => { // Fonction pour récupérer les statistiques
   try {
     const [listsRes, hostingsRes, domainsRes, usersRes] = await Promise.all([
       getLists(),
@@ -42,25 +42,27 @@ const fetchStats = async () => {
     stats.value.hostings = hostingsRes.data.length
     stats.value.domains = domainsRes.data.length
     stats.value.users = usersRes.data.length
-    // Compter toutes les tâches de toutes les listes
+    // Compter tout les éléments de toutes les listes
     let totalTasks = 0
-    for (const list of listsRes.data) {
-      const tasksRes = await getTasks(list.id)
-      totalTasks += tasksRes.data.length
+    for (const list of listsRes.data) { // pour chaque liste
+      // Récupérer les tâches de chaque liste
+      const tasksRes = await getTasks(list.id) 
+      // Ajouter le nombre de tâches à totalTasks
+      totalTasks += tasksRes.data.length 
     }
     stats.value.tasks = totalTasks
-    statsLoaded.value = true
+    statsLoaded.value = true // active le chargement des statistiques
   } catch (e) {
-    statsLoaded.value = false
+    statsLoaded.value = false // déssactive le chargement s'il y a une erreur
   }
 }
 
-const handleLogout = () => {
+const handleLogout = () => { // Fonction qui supprime le token et redirige vers /login
   logout()
   router.push('/login')
 }
 
-onMounted(fetchStats)
+onMounted(fetchStats) // Appelle fetchStats lorsque le composant est monté
 </script>
 
 <style scoped>

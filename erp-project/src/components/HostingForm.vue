@@ -1,7 +1,10 @@
 <template>
   <form @submit.prevent="onSubmit">
     <input v-model="form.name" placeholder="Hosting name" required />
-    <input v-model="form.idUser" placeholder="User ID" required />
+    <select v-model="form.idUser" required>
+      <option value="" disabled>Select user</option>
+      <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }} ({{ user.id }})</option>
+    </select>
     <input v-model="form.resellingPricing" type="number" placeholder="Price" required />
     <input v-model="form.expirationDate" type="date" placeholder="Expiration date" required />
     <input v-model="form.hasSSL" type="checkbox" /> SSL
@@ -11,9 +14,10 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, reactive, watch } from 'vue'
+import { defineProps, defineEmits, reactive, watch } from 'vue' 
 
-const props = defineProps({
+// ---component pour la gestion des hébergements---
+const props = defineProps({ 
   modelValue: {
     type: Object,
     required: true
@@ -21,13 +25,17 @@ const props = defineProps({
   submitLabel: {
     type: String,
     default: 'Submit'
+  },
+  users: {
+    type: Array,
+    default: () => []
   }
 })
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 const form = reactive({ ...props.modelValue })
 
-watch(
+watch( //met à jour le formulaire lorsque le modèle change
   () => props.modelValue,
   (newVal) => {
     Object.assign(form, newVal)

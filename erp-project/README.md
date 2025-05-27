@@ -21,4 +21,6 @@ Le projet sera accessible à l'adresse indiquée dans le terminal (par défaut h
 
 ## Remarques
 - L'API utilisée est partagée et accessible à l'adresse https://erp.stuapi.teclab.be
+- le lien vers la page de gestion des utilisateurs s'affiche seulement lorsqu'on est connecté avec le rôle admin.
+Il faut également refresh la page pour qu'il s'affiche.
 - Pour toute question, consultez le code source ou contactez l'auteur du projet.

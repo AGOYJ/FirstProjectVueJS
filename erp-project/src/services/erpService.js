@@ -1,15 +1,15 @@
 import axios from 'axios';
 
-const API_URL = 'https://erp.stuapi.teclab.be';
+const API_URL = 'https://erp.stuapi.teclab.be'; // URL de l'API
 
-const api = axios.create({
-    baseURL: API_URL,
+const api = axios.create({ // crée une instance d'axios
+    baseURL: API_URL, // base URL de l'API
     headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', 
     }
 });
 
-//interceptor to add the token to the headers
+// Interceptor pour ajouter le token d'authentification aux requêtes
 api.interceptors.request.use(config => {
     const token = sessionStorage.getItem('token');
     if (token) {
@@ -17,25 +17,28 @@ api.interceptors.request.use(config => {
     }
     return config;
 })
-
+//stockage du token dans le sessionStorage
 export const setToken = (token) => {
     sessionStorage.setItem('token', token);
 }
 
-// Function to check if the user is logged in
+// Suppression du token du sessionStorage lors de la déconnexion
 export const logout = () => {
     sessionStorage.removeItem('token');
 }
 
-export default api
-// --- AUTHENTIFICATION ---
+export default api;
+
+
+// envoi de la requête de connexion
 export const login = async (username, password) => {
     const response = await api.post('/users/tokens', {
         username,
         password
     });
-    return response.data;
+    return response.data; // retourne les données de la réponse
 }
+
 
 // --- LISTES (CRUD) ---
 export const getLists = async () => api.get('/todo-list');

@@ -2,7 +2,10 @@
   <form @submit.prevent="onSubmit">
     <input v-model="form.username" placeholder="Username" required />
     <input v-model="form.password" type="password" placeholder="Password" required />
-    <input v-model="form.role" placeholder="Role (user/admin)" required />
+    <select v-model="form.role" required>
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
     <button type="submit">{{ submitLabel }}</button>
   </form>
 </template>

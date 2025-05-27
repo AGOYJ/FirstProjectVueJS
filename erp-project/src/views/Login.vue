@@ -1,209 +1,52 @@
 <template>
   <div>
-    <h2>Connexion</h2>
+    <h1>Login</h1>
     <form @submit.prevent="handleLogin">
-      <input v-model="username" placeholder="Nom d'utilisateur" required />
-      <input v-model="password" type="password" placeholder="Mot de passe" required />
-      <button type="submit">Se connecter</button>
-      <p v-if="error" style="color: red">{{ error }}</p>
+      <input v-model="username" placeholder="Username" required />
+      <input v-model="password" type="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+      <p v-if="error" style="color: red">{{ error }}</p>  
       <p v-if="success" style="color: green">{{ success }}</p>
-      <div v-if="loading" class="spinner center">
-        <!-- From Uiverse.io by mrhyddenn --> 
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-        <div class="spinner-blade"></div>
-      </div>
+      <p>Don't have an account?</p>
+      <router-link to="/register">Register</router-link> 
     </form>
   </div>
 </template>
 
 <script>
-import { login, setToken } from '../services/erpService'
+import { login, setToken } from '../services/erpService' // importation du service de connexion et stocke le token
 
 export default {
-  data() {
+  data() {  // données réactives pour le composant
     return {
       username: '',
       password: '',
       error: '',
       success: '',
-      loading: false // pour le loader à ajouter plus tard
     }
-  },
+  }, 
   methods: {
-    async handleLogin() {
+    async handleLogin() { //fontion asynchrone
       this.error = ''
       this.success = ''
-      this.loading = true
       try {
-        const res = await login(this.username, this.password)
+        const res = await login(this.username, this.password) // appel de la fonction login du service erpService avec les données du formulaire
         console.log('Réponse de l\'API:', res)
-        if (res && res.token) {
-          setToken(res.token)
-          sessionStorage.setItem('role', res.role)
-          this.success = "Connexion réussie ! Redirection..."
-          setTimeout(() => {
-            this.$router.push('/dashboard')
+        if (res && res.token) { // vérification de la présence du token
+          setToken(res.token)// stocke le token
+          sessionStorage.setItem('role', res.role) // stocke le rôle de l'utilisateur dans sessionStorage
+          this.success = "Login successful! Redirecting..."
+          setTimeout(() => { // redirection après 1 seconde vers dashboard
+            this.$router.replace('/dashboard')
           }, 1000)
         } else {
-          this.error = "La réponse de l'API ne contient pas de token."
+          this.error = "The API response does not contain a token."
         }
       } catch (err) {
         console.error('Erreur lors de la connexion:', err)
-        this.error = "Identifiants incorrects ou erreur serveur."
-      } finally {
-        this.loading = false
+        this.error = "Incorrect credentials or server error."
       }
     }
   }
 }
 </script>
-
-<style scoped>
-/* From Uiverse.io by mrhyddenn */ 
-.spinner {
-  font-size: 28px;
-  position: relative;
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-}
-
-.spinner.center {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.spinner .spinner-blade {
-  position: absolute;
-  left: 0.4629em;
-  bottom: 0;
-  width: 0.074em;
-  height: 0.2777em;
-  border-radius: 0.0555em;
-  background-color: transparent;
-  -webkit-transform-origin: center -0.2222em;
-  -ms-transform-origin: center -0.2222em;
-  transform-origin: center -0.2222em;
-  animation: spinner-fade9234 1s infinite linear;
-}
-
-.spinner .spinner-blade:nth-child(1) {
-  -webkit-animation-delay: 0s;
-  animation-delay: 0s;
-  -webkit-transform: rotate(0deg);
-  -ms-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-
-.spinner .spinner-blade:nth-child(2) {
-  -webkit-animation-delay: 0.083s;
-  animation-delay: 0.083s;
-  -webkit-transform: rotate(30deg);
-  -ms-transform: rotate(30deg);
-  transform: rotate(30deg);
-}
-
-.spinner .spinner-blade:nth-child(3) {
-  -webkit-animation-delay: 0.166s;
-  animation-delay: 0.166s;
-  -webkit-transform: rotate(60deg);
-  -ms-transform: rotate(60deg);
-  transform: rotate(60deg);
-}
-
-.spinner .spinner-blade:nth-child(4) {
-  -webkit-animation-delay: 0.249s;
-  animation-delay: 0.249s;
-  -webkit-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
-.spinner .spinner-blade:nth-child(5) {
-  -webkit-animation-delay: 0.332s;
-  animation-delay: 0.332s;
-  -webkit-transform: rotate(120deg);
-  -ms-transform: rotate(120deg);
-  transform: rotate(120deg);
-}
-
-.spinner .spinner-blade:nth-child(6) {
-  -webkit-animation-delay: 0.415s;
-  animation-delay: 0.415s;
-  -webkit-transform: rotate(150deg);
-  -ms-transform: rotate(150deg);
-  transform: rotate(150deg);
-}
-
-.spinner .spinner-blade:nth-child(7) {
-  -webkit-animation-delay: 0.498s;
-  animation-delay: 0.498s;
-  -webkit-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-
-.spinner .spinner-blade:nth-child(8) {
-  -webkit-animation-delay: 0.581s;
-  animation-delay: 0.581s;
-  -webkit-transform: rotate(210deg);
-  -ms-transform: rotate(210deg);
-  transform: rotate(210deg);
-}
-
-.spinner .spinner-blade:nth-child(9) {
-  -webkit-animation-delay: 0.664s;
-  animation-delay: 0.664s;
-  -webkit-transform: rotate(240deg);
-  -ms-transform: rotate(240deg);
-  transform: rotate(240deg);
-}
-
-.spinner .spinner-blade:nth-child(10) {
-  -webkit-animation-delay: 0.747s;
-  animation-delay: 0.747s;
-  -webkit-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  transform: rotate(270deg);
-}
-
-.spinner .spinner-blade:nth-child(11) {
-  -webkit-animation-delay: 0.83s;
-  animation-delay: 0.83s;
-  -webkit-transform: rotate(300deg);
-  -ms-transform: rotate(300deg);
-  transform: rotate(300deg);
-}
-
-.spinner .spinner-blade:nth-child(12) {
-  -webkit-animation-delay: 0.913s;
-  animation-delay: 0.913s;
-  -webkit-transform: rotate(330deg);
-  -ms-transform: rotate(330deg);
-  transform: rotate(330deg);
-}
-
-@keyframes spinner-fade9234 {
-  0% {
-    background-color: #69717d;
-  }
-
-  100% {
-    background-color: transparent;
-  }
-}
-</style>
