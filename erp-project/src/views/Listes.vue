@@ -2,42 +2,47 @@
   <div>
     <router-link to="/dashboard" class="back-dashboard">⬅ Back to Dashboard</router-link>
     <h1>Todo Lists Management</h1>
-    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}">{{ feedbackMessage }}</div>
-    <form @submit.prevent="addTodoList">
-      <input v-model="newTodoListName" placeholder="New list name" required />
-      <button type="submit">Add</button>
-    </form>
-    <ul>
-      <li v-for="todoList in todoLists" :key="todoList.id">
-        <span v-if="editListId !== todoList.id">{{ todoList.name }}</span> <!-- Affiche le nom de la liste si on n'est pas en mode édition -->
-        <input v-else v-model="editListName" /> <!-- Champ d'édition pour le nom de la liste -->
-        <button v-if="editListId !== todoList.id" @click="startEditList(todoList)">Edit</button> <!-- Bouton EDIT -->
-        <button v-if="editListId === todoList.id" @click="saveEditList(todoList)">Save</button> <!-- Bouton SAVE -->
-        <button @click="deleteTodoList(todoList.id)">Delete</button>
-        <button @click="showTasks(todoList)">Show tasks</button>
-      </li>
-    </ul>
-
-    <div v-if="selectedTodoList">
-      <h2>Tasks for list: {{ selectedTodoList.name }}</h2> <!-- Affiche le nom de la liste sélectionnée -->
-      <form @submit.prevent="addTaskToList"> <!-- Formulaire pour ajouter une tâche -->
-        <input v-model="newTaskName" placeholder="New task" required />
-        <button type="submit">Add task</button>
+    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}" class="feedback">{{ feedbackMessage }}</div>
+    <div class="main-content-box">
+      <form class="erp-form" @submit.prevent="addTodoList">
+        <input id="newTodoListName" v-model="newTodoListName" placeholder="New list name" required />
+        <button type="submit" class="erp-form-btn">Add</button>
       </form>
       <ul>
-        <li v-for="task in tasks" :key="task.id"> <!-- Affiche la liste des tâches -->
-          <span v-if="editTaskId !== task.id">{{ task.task }} ({{ task.completed ? 'Done' : 'In progress' }})</span> <!-- Affiche le nom et son statut si on n'est pas en mode édition -->
-          <input v-else v-model="editTaskName" />
-          <select v-if="editTaskId === task.id" v-model="editTaskCompleted"> <!-- Sélecteur pour changer le statut de la tâche -->
+        <li v-for="todoList in todoLists" :key="todoList.id">
+          <span v-if="editListId !== todoList.id">{{ todoList.name }}</span>
+          <input v-else v-model="editListName" class="erp-input" placeholder="Edit list name" />
+          <div>
+            <button v-if="editListId !== todoList.id" @click="startEditList(todoList)">Edit</button>
+            <button v-if="editListId === todoList.id" @click="saveEditList(todoList)">Save</button>
+            <button @click="deleteTodoList(todoList.id)">Delete</button>
+            <button @click="showTasks(todoList)">Show tasks</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div v-if="selectedTodoList" class="main-content-box">
+      <h2>Tasks for list: {{ selectedTodoList.name }}</h2>
+      <form class="erp-form" @submit.prevent="addTaskToList">
+        <input id="newTaskName" v-model="newTaskName" placeholder="New task" required />
+        <button type="submit" class="erp-form-btn">Add task</button>
+      </form>
+      <ul>
+        <li v-for="task in tasks" :key="task.id">
+          <span v-if="editTaskId !== task.id">{{ task.task }} ({{ task.completed ? 'Done' : 'In progress' }})</span>
+          <input v-else v-model="editTaskName" class="erp-input" placeholder="Edit task name" />
+          <select v-if="editTaskId === task.id" v-model="editTaskCompleted" class="erp-input">
             <option :value="false">In progress</option>
             <option :value="true">Done</option>
           </select>
-          <button v-if="editTaskId !== task.id" @click="startEditTask(task)">Edit</button>
-          <button v-if="editTaskId === task.id" @click="saveEditTask(task)">Save</button>
-          <button @click="deleteTaskFromList(task.id)">Delete</button>
+          <div>  
+            <button v-if="editTaskId !== task.id" @click="startEditTask(task)">Edit</button>
+            <button v-if="editTaskId === task.id" @click="saveEditTask(task)">Save</button>
+            <button @click="deleteTaskFromList(task.id)">Delete</button>
+          </div>
         </li>
       </ul>
-      <button @click="closeTasks">Close tasks</button> <!-- Bouton pour fermer la liste des tâches -->
+      <button @click="closeTasks">Close tasks</button>
     </div>
   </div>
 </template>
@@ -149,7 +154,6 @@ const showTasks = async (list) => {
 }
 
 
-// ---Fonction pour récupérer les tâches d'une liste de tâches---
 const fetchTasks = async (listId) => { // Fonction asynchrone pour récupérer les tâches d'une liste spécifique
   feedbackMessage.value = ''
   try {
@@ -204,13 +208,11 @@ const saveEditTask = async (task) => {
   }
 }
 
-
-// ---Fonction pour supprimer une tâche d'une liste de tâches---
-const deleteTaskFromList = async (taskId) => {//délectionne l'id de la tâche à supprimer
+const deleteTaskFromList = async (taskId) => {
   feedbackMessage.value = ''
   try {
-    await deleteTask(selectedTodoList.value.id, taskId) // Appel de la fonction deleteTask pour supprimer la tâche
-    tasks.value = tasks.value.filter(t => t.id !== taskId) //supprime la tâche de la liste des tâches
+    await deleteTask(selectedTodoList.value.id, taskId)
+    tasks.value = tasks.value.filter(t => t.id !== taskId)
     feedbackMessage.value = 'Task deleted.'
     feedbackType.value = 'success'
   } catch (e) {
@@ -219,13 +221,11 @@ const deleteTaskFromList = async (taskId) => {//délectionne l'id de la tâche �
   }
 }
 
-
-// ---Fonction pour fermer la liste des tâches---
 const closeTasks = () => {
   feedbackMessage.value = ''
   selectedTodoList.value = null
-  tasks.value = [] // Réinitialise la liste des tâches
-  editTaskId.value = null // Réinitialise l'ID de la tâche en cours d'édition
+  tasks.value = []
+  editTaskId.value = null
   newTaskName.value = ''
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form class="erp-form" @submit.prevent="onSubmit">
     <input v-model="form.domainName" placeholder="Domain name" required />
     <input v-model="form.tld" placeholder="TLD (e.g. com, be)" required />
     <select v-model="form.idUser" required>

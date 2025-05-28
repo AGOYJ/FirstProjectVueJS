@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form class="erp-form" @submit.prevent="onSubmit">
     <input v-model="form.username" placeholder="Username" required />
     <input v-model="form.password" type="password" placeholder="Password" required />
     <select v-model="form.role" required>

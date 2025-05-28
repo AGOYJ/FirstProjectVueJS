@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
-      <input v-model="username" placeholder="Username" required />
-      <input v-model="password" type="password" placeholder="Password" required />
+    <form class="erp-form" @submit.prevent="handleLogin">
+      <input class="erp-input" v-model="username" placeholder="Username" required />
+      <input class="erp-input" v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
       <p v-if="error" style="color: red">{{ error }}</p>  
       <p v-if="success" style="color: green">{{ success }}</p>

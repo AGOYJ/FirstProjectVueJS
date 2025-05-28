@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form class="erp-form" @submit.prevent="onSubmit">
     <input v-model="form.name" placeholder="Hosting name" required />
     <select v-model="form.idUser" required>
       <option value="" disabled>Select user</option>
@@ -7,7 +7,7 @@
     </select>
     <input v-model="form.resellingPricing" type="number" placeholder="Price" required />
     <input v-model="form.expirationDate" type="date" placeholder="Expiration date" required />
-    <input v-model="form.hasSSL" type="checkbox" /> SSL
+    <label><input v-model="form.hasSSL" type="checkbox" /> SSL</label>
     <input v-model="form.comment" placeholder="Comment" />
     <button type="submit">{{ submitLabel }}</button>
   </form>

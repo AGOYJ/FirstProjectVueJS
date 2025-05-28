@@ -2,18 +2,22 @@
   <div>
     <router-link to="/dashboard" class="back-dashboard">⬅ Back to Dashboard</router-link>
     <h1>Hostings Management</h1>
-    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}">{{ feedbackMessage }}</div>
-    <HostingForm v-if="!editId" v-model="formData" :users="users" submitLabel="Add" @submit="addHosting" /> <!-- affiche le formulaire si aucun hébergement n'est en cours d'édition-->
-    <ul>
-      <li v-for="hosting in hostings" :key="hosting.id">
-        <span v-if="editId !== hosting.id">{{ hosting.name }} (User: {{ hosting.idUser }})</span>
-        <div v-else>
-          <HostingForm v-model="editData" :users="users" submitLabel="Save" @submit="() => saveEdit(hosting)" />
-        </div>
-        <button v-if="editId !== hosting.id" @click="startEdit(hosting)">Edit</button>
-        <button @click="deleteHosting(hosting.id)">Delete</button>
-      </li>
-    </ul>
+    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}" class="feedback">{{ feedbackMessage }}</div>
+    <HostingForm v-if="!editId" v-model="formData" :users="users" submitLabel="Add" /> <!-- affiche le formulaire si aucun hébergement n'est en cours d'édition-->
+    <div class="main-content-box">
+      <ul>
+        <li v-for="hosting in hostings" :key="hosting.id">
+          <span v-if="editId !== hosting.id">{{ hosting.name }} (User: {{ hosting.idUser }})</span>
+          <div v-else>
+            <HostingForm v-model="editData" :users="users" submitLabel="Save" @submit="() => saveEdit(hosting)" />
+          </div>
+          <div>
+            <button v-if="editId !== hosting.id" @click="startEdit(hosting)">Edit</button>
+            <button @click="deleteHosting(hosting.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

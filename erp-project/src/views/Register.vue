@@ -1,9 +1,9 @@
 <template>
   <div>
     <h1>Register</h1>
-    <form @submit.prevent="registerUser"> <!-- submit = quand l'utilisateur soumet le formulaire, .prevent empêche le rechargement de la page et registerUser appelle une fontion js pour tréité les données-->
-      <input v-model="formData.username" placeholder="Username" required /> <!-- v-model = la valeur du champ est synchronisée avec FormData...-->
-      <input v-model="formData.password" type="password" placeholder="Password" required /> <!-- requires signifie que le champ est obligateur-->
+    <form class="erp-form" @submit.prevent="registerUser"> <!-- Ajout de la classe .erp-form pour unifier le design avec les autres formulaires-->
+      <input class="erp-input" v-model="formData.username" placeholder="Username" required /> <!-- v-model = la valeur du champ est synchronisée avec FormData...-->
+      <input class="erp-input" v-model="formData.password" type="password" placeholder="Password" required /> <!-- requires signifie que le champ est obligateur-->
       <select v-model="formData.role" required style="display:none">
         <option value="user">User</option>
       </select>

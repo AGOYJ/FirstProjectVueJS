@@ -2,18 +2,22 @@
   <div>
     <router-link to="/dashboard" class="back-dashboard">⬅ Back to Dashboard</router-link>
     <h1>Domains Management</h1>
-    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}">{{ feedbackMessage }}</div>
-    <DomainForm v-if="!editId" v-model="formData" :users="users" :hostings="hostings" submitLabel="Add" @submit="addDomain" />
-    <ul>
-      <li v-for="domain in domains" :key="domain.id">
-        <span v-if="editId !== domain.id">{{ domain.domainName }}.{{ domain.tld }} (User: {{ domain.idUser }}, Hosting: {{ domain.idHosting }})</span>
-        <div v-else>
-          <DomainForm v-model="editData" :users="users" :hostings="hostings" submitLabel="Save" @submit="() => saveEdit(domain)" />
-        </div>
-        <button v-if="editId !== domain.id" @click="startEdit(domain)">Edit</button>
-        <button @click="deleteDomain(domain.id)">Delete</button>
-      </li>
-    </ul>
+    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}" class="feedback">{{ feedbackMessage }}</div>
+    <DomainForm v-if="!editId" v-model="formData" :users="users" :hostings="hostings" submitLabel="Add" />
+    <div class="main-content-box">
+      <ul>
+        <li v-for="domain in domains" :key="domain.id">
+          <span v-if="editId !== domain.id">{{ domain.domainName }}.{{ domain.tld }} (User: {{ domain.idUser }}, Hosting: {{ domain.idHosting }})</span>
+          <div v-else>
+            <DomainForm v-model="editData" :users="users" :hostings="hostings" submitLabel="Save" @submit="() => saveEdit(domain)" />
+          </div>
+          <div>
+            <button v-if="editId !== domain.id" @click="startEdit(domain)">Edit</button>
+            <button @click="deleteDomain(domain.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

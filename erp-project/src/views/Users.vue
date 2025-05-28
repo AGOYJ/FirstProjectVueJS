@@ -2,18 +2,22 @@
   <div>
     <router-link to="/dashboard" class="back-dashboard">⬅ Back to Dashboard</router-link> 
     <h1>Users Management</h1>
-    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}">{{ feedbackMessage }}</div>
+    <div v-if="feedbackMessage" :style="{color: feedbackType === 'error' ? 'red' : 'green'}" class="feedback">{{ feedbackMessage }}</div>
     <UserForm v-model="formData" :submitLabel="editId ? 'Save' : 'Add'" @submit="editId ? saveEdit(editingUser) : addUser" />
-    <ul>
-      <li v-for="user in users" :key="user.id">
-        <span v-if="editId !== user.id">{{ user.username }} ({{ user.role }})</span>
-        <div v-else>
-          <UserForm v-model="editData" submitLabel="Save" @submit="() => saveEdit(user)" />
-        </div>
-        <button v-if="editId !== user.id" @click="startEdit(user)">Edit</button>
-        <button @click="deleteUser(user.id)">Delete</button>
-      </li>
-    </ul>
+    <div class="main-content-box">
+      <ul>
+        <li v-for="user in users" :key="user.id">
+          <span v-if="editId !== user.id">{{ user.username }} ({{ user.role }})</span>
+          <div v-else>
+            <UserForm v-model="editData" submitLabel="Save" @submit="() => saveEdit(user)" />
+          </div>
+          <div>
+            <button v-if="editId !== user.id" @click="startEdit(user)">Edit</button>
+            <button @click="deleteUser(user.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

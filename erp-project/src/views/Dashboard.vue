@@ -64,32 +64,3 @@ const handleLogout = () => { // Fonction qui supprime le token et redirige vers 
 
 onMounted(fetchStats) // Appelle fetchStats lorsque le composant est monté
 </script>
-
-<style scoped>
-.dashboard-links {
-  margin: 1.5em 0;
-  display: flex;
-  gap: 1.5em;
-  justify-content: center;
-}
-.dashboard-links a {
-  font-size: 1.1em;
-  text-decoration: none;
-  color: #646cff;
-  background: #f4f4f4;
-  padding: 0.5em 1em;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-.dashboard-links a:hover {
-  background: #e0e7ff;
-}
-.dashboard-stats {
-  margin: 2em 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2em;
-  justify-content: center;
-  font-size: 1.1em;
-}
-</style>
