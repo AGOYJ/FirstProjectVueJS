@@ -33,7 +33,7 @@ Le projet utilise l’API disponible à l’adresse : [https://erp.stuapi.teclab
 1. Clonez ce dépôt ou extrayez le .zip :
 
    ```bash
-   git clone https://github.com/utilisateur/nom-du-projet.git
+   git clone https://github.com/AGOYJ/FirstProjectVueJS.git
    cd chemin/du/projet
    npm install
    npm run dev
